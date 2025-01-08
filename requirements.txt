@@ -1,0 +1,9 @@
+certifi==2024.12.14
+charset-normalizer==3.4.0
+dacite==1.8.1
+haversine==2.9.0
+idna==3.10
+requests==2.32.3
+types-requests==2.32.0.20241016
+typing_extensions==4.12.2
+urllib3==2.2.3
