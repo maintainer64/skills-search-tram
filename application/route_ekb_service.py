@@ -8,6 +8,7 @@ from typing_extensions import Self
 from haversine import haversine, Unit
 
 from application.intents import TransportType
+from application.language import language_hours, language_minutes
 from application.route_ekb_api import EKBTransportAPI
 
 logger = logging.getLogger(__name__)
@@ -116,8 +117,8 @@ class SearchServiceTime:
         current_time = now.hour * 60 + now.minute
         minutes = (self.hour * 60 + self.minute) - current_time
         if 0 < minutes < 30:
-            return f"через {minutes} минут"
-        return f"в {self.hour} часов {self.minute} минут"
+            return f"через {minutes} {language_minutes(self.minute)}"
+        return f"в {self.hour} {language_hours(self.hour)} {self.minute} {language_minutes(self.minute)}"
 
 
 @dataclass(kw_only=True, eq=True)

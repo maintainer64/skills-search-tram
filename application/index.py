@@ -193,7 +193,9 @@ def set_address(event: Event, state: ApplicationState) -> dict[str, Any] | None:
             },
         }
     geo = geo_list[0]
+    text = get_text_from_event(event)
     geo_response = geocoder_search(address=str(geo))
+    geo_response = geocoder_search(address=text) if not str(geo_response) and text else geo_response
     if not str(geo_response):
         return {
             "response": {"text": "Я не расслышала. Назовите полный адрес. Город, улица, дом", "end_session": False},
