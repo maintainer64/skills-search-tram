@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 class DoubleGisSearchSchedule:
     base_url = "https://routing.api.2gis.com"
-    ssl_verify = False
+    verify_ssl = False
 
     def __init__(self, security_key: str):
         self._security_key = security_key
@@ -24,7 +24,7 @@ class DoubleGisSearchSchedule:
                 method=method,
                 url=url,
                 json=json,
-                verify=self.ssl_verify,
+                verify_ssl=self.verify_ssl,
                 params=params,
             )
             result = await response.read()
@@ -44,4 +44,4 @@ class DoubleGisSearchSchedule:
                 "r": px(path, self._security_key, json.dumps(params.model_dump(), ensure_ascii=False)),
             },
         )
-        return SearchScheduleResponses.model_json_validate(response)
+        return SearchScheduleResponses.model_validate_json(response)

@@ -1,7 +1,7 @@
 from dataclasses import dataclass
-from enum import Enum
 
-from .states import Event
+from application.handlers.states import Event
+from application.services.search_schedule_service import TransportType
 
 
 def intents_confirm(event: Event) -> bool:
@@ -88,12 +88,6 @@ def intents_int(event: Event) -> list[int]:
             continue
         parsed.append(entity_value)
     return parsed
-
-
-class TransportType(str, Enum):
-    Bus = "Автобус"
-    Tram = "Трамвай"
-    Trolley = "Троллейбус"
 
 
 def intents_transport(event: Event) -> TransportType | None:

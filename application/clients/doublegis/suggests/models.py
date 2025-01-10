@@ -11,6 +11,25 @@ class DoubleGisSuggestionGeometry(BaseModel):
     centroid: str | None = None
     selection: str | None = None
 
+    @staticmethod
+    def parse_point(point: str | None) -> tuple[float, float] | None:
+        try:
+            lon, lat = point.removeprefix("POINT(").removesuffix(")").split(" ")  # type: ignore[union-attr]
+            return float(lat), float(lon)
+        except Exception:
+            return None
+
+    def point(self) -> tuple[float, float]:
+        """
+        Returns the point of the suggestion
+        :return: geometry latitude, longitude
+        """
+        for point in (self.centroid, self.selection):
+            parsed = self.parse_point(point)
+            if parsed is not None:
+                return parsed
+        return 0, 0
+
 
 class DoubleGisSuggestionPlatformItem(BaseModel):
     geometry: DoubleGisSuggestionGeometry | None = None
