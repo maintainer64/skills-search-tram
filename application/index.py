@@ -1,7 +1,7 @@
 import random
 from typing import Any
 
-from .geocoder_api import geocoder_search
+from application.clients.geocoder.client import geocoder_search
 from .intents import intents_geo, intents_confirm, intents_reject, intents_int, intents_transport
 from .route_ekb_service import ekb_transport_service
 from .states import Event, ApplicationState, States, session_is_new, get_text_from_event, get_application_state

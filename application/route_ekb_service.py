@@ -9,7 +9,6 @@ from haversine import haversine, Unit
 
 from application.intents import TransportType
 from application.language import language_hours, language_minutes
-from application.route_ekb_api import EKBTransportAPI
 
 logger = logging.getLogger(__name__)
 
@@ -143,6 +142,10 @@ class SearchServiceStations:
         return ".".join([x.text() for x in self.stations])
 
 
+class EKBTransportAPI:
+    pass
+
+
 def ekb_transport_service(
     transport_number: int,
     transport_type: TransportType | None,
@@ -158,7 +161,7 @@ def ekb_transport_service(
     :return: Список маршрутов
     """
     client = EKBTransportAPI()
-    trans_type_response = client.get_trans_type_tree()
+    trans_type_response = client.get_trans_type_tree()  # type: ignore
     routes = get_best_transport_type(
         trans_type=trans_type_response["result"],
         transport_number=str(transport_number),
@@ -168,7 +171,7 @@ def ekb_transport_service(
     logger.info(f"Нашли подходящий транспорт {len(routes)}")
     stops: list[StopItem] = []
     for route in routes:
-        route_response = client.get_route(mr_id=route.mr_id)
+        route_response = client.get_route(mr_id=route.mr_id)  # type: ignore
         stops.extend(
             get_best_stop(
                 route_response=route_response["result"]["races"],
@@ -183,7 +186,7 @@ def ekb_transport_service(
     for stop in stops:
         arrivals.extend(
             get_best_arrival(
-                arrival_response=client.get_stop_arrive(st_id=str(stop.st_id))["result"],
+                arrival_response=client.get_stop_arrive(st_id=str(stop.st_id))["result"],  # type: ignore
                 routes=routes,
                 limit=2,
             )
