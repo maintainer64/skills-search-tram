@@ -6,7 +6,7 @@ from pydantic import BaseModel
 
 
 class SearchScheduleDeparture(BaseModel):
-    departure_time: int = field(default_factory=lambda: int(datetime.utcnow().timestamp()))
+    departure_time: int = field(default_factory=lambda: int(datetime.now().timestamp()))
     platforms: list[str] | None = None
     routes: list[str] | None = None
     direction_id: str | None = None

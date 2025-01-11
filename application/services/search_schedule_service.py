@@ -22,13 +22,13 @@ class SearchServiceTime(BaseModel):
         current_time = now.hour * 60 + now.minute
         minutes = (self.hour * 60 + self.minute) - current_time
         if 0 < minutes < 30:
-            return f"через {minutes} {language_minutes(self.minute)}"
+            return f"через {minutes} {language_minutes(minutes)}"
         return f"в {self.hour} {language_hours(self.hour)} {self.minute} {language_minutes(self.minute)}"
 
 
 class SearchServiceStation(BaseModel):
-    last_station_title: str
-    times: list[SearchServiceTime]
+    last_station_title: str = ""
+    times: list[SearchServiceTime] = []
 
     def text(self) -> str:
         if not self.times:

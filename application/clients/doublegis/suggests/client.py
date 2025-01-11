@@ -1,42 +1,23 @@
-import json
 import logging
+from dataclasses import dataclass
 
-import aiohttp
-from aiohttp import ClientSession
-
-from application.clients.doublegis.suggests.models import DoubleGisSuggestRequests, DoubleGisSuggestResponse
+from application.clients.doublegis.base.client import DoubleGisBaseApi
+from application.clients.doublegis.suggests.models import (
+    DoubleGisSuggestRequests,
+    DoubleGisSuggestResponse,
+    DoubleGisSuggestBuildingResponse,
+    DoubleGisSuggestRegionResponse,
+)
 
 logger = logging.getLogger(__name__)
 
 
-class DoubleGisSuggests:
-    base_url = "https://catalog.api.2gis.com"
-    verify_ssl = False
-
-    def __init__(
-        self,
-        security_key: str,
-    ):
-        self._security_key = security_key
-        self.session = ClientSession()
-
-    async def _request(self, method: str, url: str, json: dict | None, params: dict | None) -> bytes:
-        logger.debug(f"Отправка запроса в [{method}]{url} {json=} {params=}")
-        logger.info(f"Отправка запроса в [{method}]{url}")
-        async with aiohttp.ClientSession() as client:
-            response = await client.request(
-                method=method,
-                url=url,
-                json=json,
-                verify_ssl=self.verify_ssl,
-                params=params,
-                raise_for_status=True,
-            )
-            result = await response.read()
-        logger.info(f"Получен ответ от [{method}]{url}")
-        logger.info(f"Получен ответ от [{method}]{url}")
-        logger.debug(f"Получен ответ от [{method}]{url} {result=}")
-        return result
+@dataclass(kw_only=True)
+class DoubleGisSuggests(DoubleGisBaseApi):
+    base_url: str = "https://catalog.api.2gis.com"
+    verify_ssl: bool = False
+    security_key: str = ""
+    timeout: float = 3.0
 
     async def suggests_transport(self, params: DoubleGisSuggestRequests) -> DoubleGisSuggestResponse:
         assert params.lat, "Не указана ширина"
@@ -48,7 +29,7 @@ class DoubleGisSuggests:
             url=self.base_url + path,
             json=params.model_dump(),
             params={
-                "key": self._security_key,
+                "key": self.security_key,
                 "locale": "ru_RU",
                 "fields": "items.routes,items.platforms,items.directions",
                 "search_is_query_text_complete": "true",
@@ -57,12 +38,12 @@ class DoubleGisSuggests:
                 "type": "route",
                 "q": params.search,
                 "location": f"{params.lon}, {params.lat}",
-                "page_size": 3,
+                "page_size": 30,
             },
         )
         return DoubleGisSuggestResponse.model_validate_json(response)
 
-    async def suggests_building(self, params: DoubleGisSuggestRequests) -> dict:
+    async def suggests_building(self, params: DoubleGisSuggestRequests) -> DoubleGisSuggestBuildingResponse:
         assert params.search, "Не указан поисковой запрос"
         path = "/3.0/items/geocode"
         response = await self._request(
@@ -70,15 +51,29 @@ class DoubleGisSuggests:
             url=self.base_url + path,
             json=params.model_dump(),
             params={
-                "key": self._security_key,
+                "key": self.security_key,
                 "locale": "ru_RU",
                 "search_is_query_text_complete": "true",
                 "search_input_method": "voice",
                 "type": "building",
-                "fields": "items.address,items.point,items.adm_div,items.full_address_name",
+                "fields": "items.point,items.full_address_name",
                 "q": params.search,
                 "page_size": 3,
                 "page": 1,
             },
         )
-        return json.loads(response)
+        return DoubleGisSuggestBuildingResponse.model_validate_json(response)
+
+    async def region_by_branch_id(self, branch_id: str) -> DoubleGisSuggestRegionResponse:
+        path = "/2.0/region/get"
+        response = await self._request(
+            method="GET",
+            url=self.base_url + path,
+            json=None,
+            params={
+                "key": self.security_key,
+                "branch_id": branch_id,
+                "fields": "items.time_zone,items.uri_code,items.code",
+            },
+        )
+        return DoubleGisSuggestRegionResponse.model_validate_json(response)

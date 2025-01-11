@@ -94,7 +94,7 @@ def intents_transport(event: Event) -> TransportType | None:
     request = event.get("request")
     if not isinstance(request, dict):
         return None
-    text = request.get("original_utterance")
+    text = request.get("command")
     if not isinstance(text, str):
         return None
     text = text.lower()

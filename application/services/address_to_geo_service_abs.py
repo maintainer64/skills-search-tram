@@ -7,7 +7,8 @@ class GeoPoint(BaseModel):
     lat: float
     lon: float
     address: str
-    city_alias_code: str
+    time_zone_offset: int
+    code: str
 
 
 class AddressToGeoServiceABC(ABC):

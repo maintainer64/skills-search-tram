@@ -41,7 +41,7 @@ class YandexHandler:
         text = get_text_from_event(event)
         if text:
             return None
-        if not state.complete_address():
+        if bool(state.geo_point):
             return None
         state.state = States.SET_ADDRESS
         choices = (
@@ -63,7 +63,7 @@ class YandexHandler:
     async def search_transport(self, event: Event, state: ApplicationState) -> dict[str, Any] | None:
         if state.state != States.COMPLETE_ADDRESS:
             return None
-        if not state.complete_address():
+        if not state.geo_point:
             return None
         transport_type = intents_transport(event)
         transport_number = intents_int(event)
@@ -72,9 +72,9 @@ class YandexHandler:
         service = await self.search_schedule.get_transport(
             transport_query=str(transport_number[0]),
             transport_type=transport_type,
-            lat=state.geo_lat or 0.0,
-            lon=state.geo_lon or 0.0,
-            city_code=state.geo_city_code or "",
+            lat=state.geo_point.lat,
+            lon=state.geo_point.lon,
+            city_code=state.geo_point.code,
         )
         return {
             "response": {
@@ -155,7 +155,7 @@ class YandexHandler:
         else:
             return None
         state.state = States.SET_ADDRESS
-        state.reset_address()
+        state.geo_point = None
         choices = (
             "Пожалуйста, укажите полный адрес, включая город, улицу и номер дома.",
             "Назовите мне полный адрес, состоящий из города, улицы и номера дома, чтобы помочь вам с маршрутом.",
@@ -221,18 +221,13 @@ class YandexHandler:
                     "end_session": False,
                 },
             }
-        geo = geo_list[0]
         text = get_text_from_event(event)
-        geo_point = await self.address_to_geo.get_by_address(address=str(geo))
-        geo_point = await self.address_to_geo.get_by_address(address=text) if not geo_point and text else geo_point
+        geo_point = await self.address_to_geo.get_by_address(address=text) if text else None
         if not geo_point:
             return {
                 "response": {"text": "Я не расслышала. Назовите полный адрес. Город, улица, дом", "end_session": False},
             }
-        state.geo_lon = geo_point.lon
-        state.geo_lat = geo_point.lat
-        state.geo_address = geo_point.address
-        state.geo_city_code = geo_point.city_alias_code
+        state.geo_point = geo_point
         state.state = States.SET_ADDRESS
         return {
             "response": {
@@ -251,10 +246,10 @@ class YandexHandler:
         # Подтверждает текущий не подтвержденный адрес
         if state.state != States.SET_ADDRESS:
             return None
-        if not state.complete_address():
+        if not bool(state.geo_point):
             return None
         if intents_reject(event):
-            state.reset_address()
+            state.geo_point = None
             state.state = States.SET_ADDRESS
             choice = (
                 "Поняла, давайте выберем другой адрес для продолжения. Укажите город, улицу и номер дома, пожалуйста.",

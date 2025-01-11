@@ -1,5 +1,5 @@
 default_stages:
-  - commit
+  - pre-commit
 
 repos:
   - repo: https://github.com/psf/black
@@ -27,22 +27,22 @@ repos:
     hooks:
       - id: check-docstring-first
         stages:
-          - commit
-          - push
+          - pre-commit
+          - pre-push
       - id: check-merge-conflict
         stages:
-          - push
+          - pre-push
       - id: flake8
         stages:
-          - commit
-          - push
+          - pre-commit
+          - pre-push
         args:
           - --max-line-length=120
           - --ignore=E203,W503,E704
       - id: trailing-whitespace
         stages:
-          - commit
-          - push
+          - pre-commit
+          - pre-push
       - id: trailing-whitespace
       - id: end-of-file-fixer
         exclude: \.svg$
