@@ -66,3 +66,4 @@ class SearchScheduleServiceABC(ABC):
         :return: Список маршрутов
         """
         ...
+

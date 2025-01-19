@@ -16,9 +16,9 @@ from application.services.search_schedule_service import SearchScheduleServiceAB
 
 class YandexHandler:
     def __init__(
-        self,
-        address_to_geo: AddressToGeoServiceABC,
-        search_schedule: SearchScheduleServiceABC,
+            self,
+            address_to_geo: AddressToGeoServiceABC,
+            search_schedule: SearchScheduleServiceABC,
     ):
         self._funcs = (
             self.hello_start,
@@ -200,7 +200,7 @@ class YandexHandler:
         return {
             "response": {
                 "text": f"Ваш текущий адрес: {str(state.geo_address)}. Вы можете его изменить. "
-                f'Просто скажите "Поменяй адрес"',
+                        f'Просто скажите "Поменяй адрес"',
                 "end_session": False,
                 "buttons": [
                     {"title": "Сменить адрес", "hide": True},
@@ -319,6 +319,32 @@ class YandexHandler:
             "Извините. Я вас не поняла. Уточните пожалуйста Ваш запрос",
             "Прошу прощения. Уточните пожалуйста Ваш запрос",
         )
+        choice_end = (
+            "До встречи! Если понадоблюсь — обращайтесь.",
+            "Всего доброго! Буду рада помочь снова.",
+            "До скорого! Хорошего вам дня.",
+            "Пока-пока! Увидимся позже.",
+            "Берегите себя! До новых встреч.",
+            "На связи! Возвращайтесь, когда захотите.",
+            "Удачи! Я всегда готова помочь.",
+            "Счастливо! Заходите ещё.",
+            "Пока! Если что — я рядом.",
+            "До свидания! Пусть ваш день будет отличным.",
+            "Ещё услышимся! Удачи вам.",
+            "Пока! И помните — я всегда готова помочь.",
+        )
+        exit_words = ("стоп", "хватит", "выключи")
+        user_input = get_text_from_event(event).lower() if get_text_from_event(event) else ""
+        if any(user_input for exit_word in exit_words):
+            response = {
+                "version": event["version"],
+                "session": event["session"],
+                "response": {
+                    "text": random.choice(choice_end),
+                    "end_session": True,
+                },
+            }
+            return response
         response = {
             "version": event["version"],
             "session": event["session"],

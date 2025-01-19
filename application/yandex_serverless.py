@@ -10,3 +10,4 @@ async def handler(event: Event, context):
     :return: response to be serialized as JSON.
     """
     return await DI().yandex_handler().handler(event=event, context=context)
+
