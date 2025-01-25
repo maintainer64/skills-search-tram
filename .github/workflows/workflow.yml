@@ -34,7 +34,7 @@ jobs:
       - name: Upload front archive
         uses: actions/upload-artifact@v4
         with:
-          name: arrive.zip
+          name: arrive
           path: arrive.zip
           retention-days: 1
 
@@ -47,7 +47,7 @@ jobs:
       - name: Download front archive
         uses: actions/download-artifact@v4
         with:
-          name: arrive.zip
+          name: arrive
           path: arrive.zip
 
       - name: Upload archive to remote server
@@ -58,7 +58,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
           source: "arrive.zip"
-          target: "/tmp/arrive.zip"
+          target: "/tmp"
 
       - name: Deploy on remote server
         uses: appleboy/ssh-action@master
@@ -73,8 +73,7 @@ jobs:
             # Создаем временную директорию для распаковки
             mkdir -p /tmp/arrive
             # Распаковываем архив
-            unzip -o /tmp/arrive.zip -d /tmp/arrive
+            unzip -o /tmp/arrive.zip/arrive.zip -d /tmp/arrive
             # Перемещаем содержимое папки out в целевую директорию
             sudo rsync -av --delete /tmp/arrive/out/ ${{ secrets.DEPLOY_PATH }}
-            # Удаляем временные файлы
-            rm -rf /tmp/arrive /tmp/arrive.zip
+            rm -rf arrive*
