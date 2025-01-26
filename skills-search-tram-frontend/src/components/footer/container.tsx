@@ -11,6 +11,7 @@ export function FooterContainer({children}: Props) {
         justify-content: space-around;
         line-height: 20pt;
         font-weight: 400;
+        padding-top: 40pt;
 
         & a {
             color: inherit;

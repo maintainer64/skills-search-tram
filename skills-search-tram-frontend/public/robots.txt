@@ -3,7 +3,7 @@ User-agent: *
 Allow: /
 
 # Host
-Host: https://gubanov.site/app/arrive/
+Host: https://arrive.gubanov.site
 
 # Sitemaps
-Sitemap: https://gubanov.site/app/arrive/sitemap.xml
+Sitemap: https://arrive.gubanov.site/sitemap.xml
