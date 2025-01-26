@@ -18,8 +18,8 @@ const styles = {
     icon: css`
         justify-content: center;
         padding-right: 0;
-        width: 64px;
-        height: 64px;
+        width: 32px;
+        height: 32px;
         flex-shrink: 0;
         margin: auto;
     `,

@@ -3,6 +3,8 @@ import {IconYandex} from "@/components/assistants/icon-yandex";
 import {IconVK} from "@/components/assistants/icon-vk";
 import {IconSber} from "@/components/assistants/icon-sber";
 import AccessibilityCard from "@/components/assistants/card";
+import {useHomeParallaxContext} from "@/components/parallax-providers/home/context";
+import {mapP} from "@/components/parallax-providers/map-scroll-effect";
 
 const styles = {
     container: css`
@@ -33,31 +35,41 @@ const styles = {
 }
 
 const AccessibilityBlock = () => {
+    const {availableBlock: {progress}} = useHomeParallaxContext();
     const items = [
         {
             title: 'Алиса',
             subtitle: 'Станция',
+            hoverText: 'На модерации',
             image: 'assistant_alice.png',
+            background: 'assistant_alice_bg.png',
             icon: <IconYandex/>,
         },
         {
             title: 'Салют',
             subtitle: 'Boom',
+            hoverText: 'В разработке',
             image: 'assistant_salute.png',
+            background: 'assistant_salute_bg.png',
             icon: <IconSber/>,
         },
         {
             title: 'Маруся',
             subtitle: 'Капсула',
+            hoverText: 'В разработке',
             image: 'assistant_marusya.png',
+            background: 'assistant_marusya_bg.png',
             icon: <IconVK/>,
         },
     ];
+    const scale = mapP(0.95, 1, progress);
 
     return (
         <div className={styles.container}>
             {items.map((item, index) => (
-                <div className={styles.card} key={index}>
+                <div style={{
+                    transform: `scale(${scale})`
+                }} className={styles.card} key={index}>
                     <AccessibilityCard {...item}/>
                 </div>
             ))}

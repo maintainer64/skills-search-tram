@@ -35,16 +35,8 @@ export const FooterComponent = () => {
             </FooterHeadline>
             <FooterContent contents={[
                 {
-                    text: 'Github...',
-                },
-                {
-                    text: 'VK...',
-                },
-                {
-                    text: 'Telegram...',
-                },
-                {
-                    text: 'Whatsapp...',
+                    text: 'Github',
+                    url: 'https://github.com/maintainer64/skills-search-tram'
                 },
             ]}/>
         </div>
@@ -54,13 +46,16 @@ export const FooterComponent = () => {
             </FooterHeadline>
             <FooterContent contents={[
                 {
-                    text: 'Yandex',
+                    text: 'Яндекс диалоги',
+                    url: 'https://dialogs.yandex.ru/'
                 },
                 {
-                    text: 'Sber',
+                    text: 'Каталог приложений Сбера',
+                    url: 'https://apps.sber.ru/skills/'
                 },
                 {
-                    text: 'Vk',
+                    text: 'Каталог функций Маруси',
+                    url: 'https://marusia.vk.com/skills',
                 },
             ]}/>
         </div>
