@@ -4,6 +4,7 @@ import "./globals.css";
 import {Providers} from './providers';
 import {ReactNode} from "react";
 import {Montserrat} from 'next/font/google'
+import Script from "next/script";
 
 
 const montserrat = Montserrat({
@@ -31,6 +32,7 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="ru" suppressHydrationWarning={true}>
+        <Script src="/yandexMetric.js"/>
         <body
             suppressHydrationWarning={true}
             className={montserrat.className}
