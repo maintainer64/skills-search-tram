@@ -18,7 +18,7 @@ const styles = {
         }
 
         & > h3 {
-            color: white!important;
+            color: white !important;
         }
 
     `,
@@ -32,7 +32,7 @@ export function HeaderAvailableBlock() {
             0.4,
             progress
         ),
-        paddingTop: `${mapP(40, 200, progress)}pt`,
+        paddingTop: `${mapP(20, 200, progress)}pt`,
         paddingBottom: `${mapP(10, 40, progress)}pt`,
     }
     return <div className={styles.header}>
