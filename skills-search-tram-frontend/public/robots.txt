@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://arrive.gubanov.site
+
+# Sitemaps
+Sitemap: https://arrive.gubanov.site/sitemap.xml

@@ -1,0 +1,33 @@
+:root {
+    --background: #ffffff;
+    --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --background: #0a0a0a;
+        --foreground: #ededed;
+    }
+}
+
+body {
+    color: var(--foreground);
+    background: var(--background);
+    top: 0;
+    padding: 0;
+    margin: 0;
+    font-family: Montserrat, Helvetica, Arial, sans-serif;
+    font-weight: 400;
+    width: fit-content;
+}
+
+h1, h2, h3, h4 {
+    font-family: Montserrat, Helvetica, Arial, sans-serif;
+    font-weight: 800;
+}
+
+@media (max-width: 767px) {
+    h1, h2, h3, h4 {
+        font-size: 44pt !important;
+    }
+}

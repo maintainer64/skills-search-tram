@@ -1,6 +1,6 @@
 # skills-search-tram
 
-![](covers/when_arrive_logo.png)
+![](skills-search-tram-frontend/public/when_arrive_logo.png)
 
 **Навык для умных устройств.**
 Позволяет получить расписание ближайшего общественного транспорта
